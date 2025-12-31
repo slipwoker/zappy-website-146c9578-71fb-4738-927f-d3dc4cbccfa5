@@ -1,67 +1,77 @@
-# Business — Generative Engine Optimization Map
+# הדרך שלך — Generative Engine Optimization Map
+
+> A תיירות ונסיעות business.
 
 ---
 
 ## Pages
 
 ### בית
-https://haderech-shelcha.co.il
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com
 גלו את הדרך שלך לחופשה מושלמת. תכנון טיולים מותאם אישית, כרטיסי טיסה, בתי מלון וכרטיסים להופעות בחו"ל. ייעוץ מקצועי לפני כל טיול.
 
 ### שירותים
-https://haderech-shelcha.co.il/services
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/services
 שירותי תכנון טיול מותאם אישית לאירופה, כרטיסי טיסה, בתי מלון, כרטיסים להופעות בחו"ל וייעוץ מקצועי. הדרך שלך מציעה פתרונות נסיעה מקיפים.
 
 ### אודות
-https://haderech-shelcha.co.il/about
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/about
 הכירו את הדרך שלך - מומחים בתכנון טיול מותאם אישית לאירופה וכרטיסים להופעות בחו"ל. הסיפור שלנו, הערכים שלנו, והמחויבות שלנו לשירות מעולה.
 
 ### צור קשר
-https://haderech-shelcha.co.il/contact
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/contact
 צרו קשר עם הדרך שלך לתכנון טיול מותאם אישית לאירופה, כרטיסי טיסה, בתי מלון וייעוץ לפני טיול לחו"ל. אנחנו כאן לעזור לכם.
 
 ### הבלוג והמגזין - הדרך שלך | טיפים לתכנון טיול לאירופה
-https://haderech-shelcha.co.il/blog
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/blog
 הבלוג של הדרך שלך - כל מה שצריך לדעת על תכנון טיול מותאם אישית לאירופה, המלצות לכרטיסים להופעות בחו"ל, טיפים לאריזה ומדריכי יעדים.
 
 ### תכנון טיול
-https://haderech-shelcha.co.il/blog/planning-guide
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/blog/planning-guide
 מדריך מקיף לתכנון טיול באירופה: איך לבנות מסלול, בחירת יעדים, תקציב וטיפים חשובים. הדרך שלך - תכנון טיולים בהתאמה אישית.
 
 ### הופעות בחו"ל
-https://haderech-shelcha.co.il/blog/concerts-abroad
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/blog/concerts-abroad
 רוצים לשלב הופעה בטיול? כל מה שצריך לדעת על רכישת כרטיסים להופעות בחו"ל, פסטיבלים באירופה וטיפים לרכישה בטוחה.
 
 ### אריזה חכמה
-https://haderech-shelcha.co.il/blog/packing-tips
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/blog/packing-tips
 לא יודעים מה לארוז? המדריך המלא לאריזה חכמה לטיול באירופה. טיפים לחסכון במקום, התאמה למזג האוויר ורשימת ציוד חובה.
 
 ### קולינריה
-https://haderech-shelcha.co.il/blog/culinary-journey
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/blog/culinary-journey
 המדריך לפודיז באירופה: השווקים הכי שווים, מסעדות מומלצות וסיורי אוכל שאסור לפספס. בואו לגלות את הטעמים של אירופה.
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://haderech-shelcha.co.il/privacy
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://haderech-shelcha.co.il/terms
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://haderech-shelcha.co.il/accessibility
+https://zappy-site-146c9578-71fb-4738-927f.onrender.com/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
 
 # Business Context (for LLM understanding)
 
-## About Business
+## About הדרך שלך
+הדרך שלך is a business in the תיירות ונסיעות industry.
+
+## Target Audience
+מטיילים לחו"ל
+
+## Industry
+תיירות ונסיעות
+
 ---
 
 # Additional Resources
 
-- **Sitemap**: https://haderech-shelcha.co.il/sitemap.xml
-- **Robots.txt**: https://haderech-shelcha.co.il/robots.txt
+- **Sitemap**: https://zappy-site-146c9578-71fb-4738-927f.onrender.com/sitemap.xml
+- **Robots.txt**: https://zappy-site-146c9578-71fb-4738-927f.onrender.com/robots.txt
