@@ -7,6 +7,11 @@
 /privacy  /privacy.html  200
 /accessibility  /accessibility.html  200
 /terms  /terms.html  200
+/blog  /blog.html  200
+/blog/planning-guide  /blog/planning-guide.html  200
+/blog/concerts-abroad  /blog/concerts-abroad.html  200
+/blog/packing-tips  /blog/packing-tips.html  200
+/blog/culinary-journey  /blog/culinary-journey.html  200
 
 # Legal pages - redirect old .html URLs to friendly URLs
 /privacy.html  /privacy  301
