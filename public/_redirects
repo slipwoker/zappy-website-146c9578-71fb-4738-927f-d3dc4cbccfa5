@@ -18,6 +18,8 @@
 /blog/accommodation-guide  /blog/accommodation-guide.html  200
 /blog/family-trip  /blog/family-trip.html  200
 /contact  /contact.html  200
+/benefits  /benefits.html  200
+/pricing  /pricing.html  200
 
 # Legal pages - redirect old .html URLs to friendly URLs
 /privacy.html  /privacy  301
