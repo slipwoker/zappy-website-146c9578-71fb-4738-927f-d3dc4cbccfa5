@@ -1,22 +1,22 @@
 # Clean URL redirects for Render static hosting
 # These rewrite rules show clean URLs to users while serving .html files
 
+/testimonials  /testimonials.html  200
 /home-page  /home-page.html  200
-/my-service  /my-service.html  200
 /privacy  /privacy.html  200
 /about-me  /about-me.html  200
+/my-service  /my-service.html  200
+/blog/budget-tips  /blog/budget-tips.html  200
 /accessibility  /accessibility.html  200
+/blog/packing-tips  /blog/packing-tips.html  200
 /terms  /terms.html  200
 /blog  /blog.html  200
 /blog/planning-guide  /blog/planning-guide.html  200
 /blog/concerts-abroad  /blog/concerts-abroad.html  200
-/blog/packing-tips  /blog/packing-tips.html  200
 /blog/culinary-journey  /blog/culinary-journey.html  200
 /blog/europe-transport-guide  /blog/europe-transport-guide.html  200
-/blog/budget-tips  /blog/budget-tips.html  200
 /blog/accommodation-guide  /blog/accommodation-guide.html  200
 /blog/family-trip  /blog/family-trip.html  200
-/testimonials  /testimonials.html  200
 /contact  /contact.html  200
 
 # Legal pages - redirect old .html URLs to friendly URLs
