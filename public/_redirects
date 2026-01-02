@@ -20,6 +20,11 @@
 /contact  /contact.html  200
 /benefits  /benefits.html  200
 /pricing  /pricing.html  200
+/blog-418396  /blog-418396.html  200
+/blog/paris-with-kids  /blog/paris-with-kids.html  200
+/blog/holland-families  /blog/holland-families.html  200
+/blog/alps-adventure  /blog/alps-adventure.html  200
+/blog/south-america-couples  /blog/south-america-couples.html  200
 
 # Legal pages - redirect old .html URLs to friendly URLs
 /privacy.html  /privacy  301
