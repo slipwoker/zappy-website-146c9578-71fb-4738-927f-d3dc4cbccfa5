@@ -1,19 +1,257 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים.">
-<meta name="keywords" content="הדרך שלך, תכנון טיול מותאם אישית לאירופה, כרטיסים להופעות בחו\" ל,="" ייעוץ="" לפני="" טיול="" לחו\"ל"="">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>חבילות ומחירים - הדרך שלך</title>
+    <meta name="description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים.">
+    <meta name="keywords" content="">
+    
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: '146c9578-71fb-4738-927f-d3dc4cbccfa5',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/styles.css">
+    <style id="zappy-mobile-submenu-styles">
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; }
+        .sub-menu.mobile-expanded { max-height: 500px !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: 44px !important; background: transparent !important; border: none !important; cursor: pointer !important; }
+        .mobile-submenu-toggle::after { content: '' !important; display: block !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; }
+      }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+</head>
+<body>
+<!DOCTYPE ><html lang="he" dir="rtl"><head>
+<meta charset="UTF-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+<meta name="description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים." ל.="" ייעוץ="" מקצועי="" לפני="" כל="" טיול."=""></meta>
+<meta name="keywords" content="הדרך שלך, תכנון טיול מותאם אישית לאירופה, כרטיסים להופעות בחו\" ל,="" ייעוץ="" לפני="" טיול="" לחו\"ל"=""></meta>
 <title>חבילות ומחירים - הדרך שלך</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></link>
 
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
-    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico"></link>
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png"></link>
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png"></link>
+    <link rel="icon" type="image/png" sizes="48x48" href="assets/favicon-48x48.png"></link>
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192x192.png"></link>
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512x512.png"></link>
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png"></link>
 <style>
 /* Zappy Attribution Header Styles */
 .zappy-header {
@@ -62,7 +300,7 @@
   opacity: 0.7;
 }</style>
     <!-- Cookie Consent -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css"></link>
     <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
     <!-- Mickidum Accessibility Toolbar -->
     <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
@@ -633,21 +871,21 @@ img[data-no-hero-position] { position: static !important; }
         
     <!-- Open Graph / Social Media Meta Tags -->
     <meta property="og:url" content="https://haderech-shelcha.co.il/pricing">
-    <meta property="og:type" content="article">
-    <meta property="og:title" content="חבילות ומחירים - הדרך שלך">
-    <meta property="og:description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים.">
-    <meta property="og:image" content="https://haderech-shelcha.co.il/assets/page-feature-1-1767287130133-og.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:alt" content="חבילות ומחירים - הדרך שלך">
-    <meta property="og:locale" content="he_IL">
+    <meta property="og:type" content="article"></meta>
+    <meta property="og:title" content="חבילות ומחירים - הדרך שלך"></meta>
+    <meta property="og:description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים."></meta>
+    <meta property="og:image" content="https://haderech-shelcha.co.il/assets/page-feature-1-1767287130133-og.jpg"></meta>
+    <meta property="og:image:width" content="1200"></meta>
+    <meta property="og:image:height" content="630"></meta>
+    <meta property="og:image:type" content="image/jpeg"></meta>
+    <meta property="og:image:alt" content="חבילות ומחירים - הדרך שלך"></meta>
+    <meta property="og:locale" content="he_IL"></meta>
     <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="חבילות ומחירים - הדרך שלך">
-    <meta name="twitter:description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים.">
-    <meta name="twitter:image" content="https://haderech-shelcha.co.il/assets/page-feature-1-1767287130133-og.jpg">
-    <meta name="twitter:image:alt" content="חבילות ומחירים - הדרך שלך"><style id="zappy-ai-page-styles">
+    <meta name="twitter:card" content="summary_large_image"></meta>
+    <meta name="twitter:title" content="חבילות ומחירים - הדרך שלך"></meta>
+    <meta name="twitter:description" content="בחרו את חבילת תכנון הטיול המתאימה לכם. הדרך שלך מציעה מסלולים מותאמים אישית לאירופה, ייעוץ מקצועי וכרטיסים לאטרקציות במחירים משתלמים."></meta>
+    <meta name="twitter:image" content="https://haderech-shelcha.co.il/assets/page-feature-1-1767287130133-og.jpg"></meta>
+    <meta name="twitter:image:alt" content="חבילות ומחירים - הדרך שלך"></meta><style id="zappy-ai-page-styles">
 
 
 /* Zappy Base Styles for Edit Mode Compatibility */
@@ -727,210 +965,7 @@ img[data-no-hero-position] { position: static !important; }
 .ai-generated-page [class*="hero"] p { color: unset !important; }
 /* End Zappy Base Styles */
 
-</style><!-- Zappy Analytics -->
-<script>
-(function() {
-  'use strict';
-  
-  // Configuration
-  var config = {
-    websiteId: '146c9578-71fb-4738-927f-d3dc4cbccfa5',
-    apiUrl: 'https://api.zappy5.com/api/analytics/track',
-    sessionDuration: 30 * 60 * 1000, // 30 minutes
-    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
-    trackPageViews: true,
-    trackClicks: true,
-    trackFormSubmissions: true
-  };
-  
-  // Generate or retrieve persistent visitor ID (30 days)
-  function getVisitorId() {
-    var visitorKey = 'zappy_visitor_' + config.websiteId;
-    var visitor = null;
-    
-    try {
-      visitor = localStorage.getItem(visitorKey);
-      if (visitor) {
-        var visitorData = JSON.parse(visitor);
-        var now = Date.now();
-        
-        // Check if visitor ID is still valid (30 days)
-        if (now - visitorData.created < config.visitorDuration) {
-          // Update last seen timestamp
-          visitorData.lastSeen = now;
-          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
-          return visitorData.id;
-        }
-      }
-    } catch (e) {
-      console.warn('Zappy Analytics: LocalStorage not available');
-    }
-    
-    // Generate new visitor ID
-    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    
-    try {
-      localStorage.setItem(visitorKey, JSON.stringify({
-        id: newVisitorId,
-        created: Date.now(),
-        lastSeen: Date.now()
-      }));
-    } catch (e) {
-      // Continue without local storage
-    }
-    
-    return newVisitorId;
-  }
-  
-  // Generate or retrieve session ID (30 minutes)
-  function getSessionId() {
-    var sessionKey = 'zappy_session_' + config.websiteId;
-    var session = null;
-    
-    try {
-      session = sessionStorage.getItem(sessionKey);
-      if (session) {
-        var sessionData = JSON.parse(session);
-        var now = Date.now();
-        
-        // Check if session is still valid
-        if (now - sessionData.timestamp < config.sessionDuration) {
-          // Update timestamp
-          sessionData.timestamp = now;
-          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
-          return sessionData.id;
-        }
-      }
-    } catch (e) {
-      console.warn('Zappy Analytics: SessionStorage not available');
-    }
-    
-    // Generate new session ID
-    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    
-    try {
-      sessionStorage.setItem(sessionKey, JSON.stringify({
-        id: newSessionId,
-        timestamp: Date.now()
-      }));
-    } catch (e) {
-      // Continue without session storage
-    }
-    
-    return newSessionId;
-  }
-  
-  var visitorId = getVisitorId();
-  var sessionId = getSessionId();
-  
-  // Track an event
-  function trackEvent(eventType, data) {
-    data = data || {};
-    
-    var eventData = {
-      website_id: config.websiteId,
-      event_type: eventType,
-      page_path: window.location.pathname,
-      referrer: document.referrer || 'direct',
-      visitor_id: visitorId,
-      session_id: sessionId,
-      metadata: data
-    };
-    
-    // Use sendBeacon if available (better for page unload events)
-    if (navigator.sendBeacon) {
-      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
-      navigator.sendBeacon(config.apiUrl, blob);
-    } else {
-      // Fallback to fetch
-      fetch(config.apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(eventData),
-        keepalive: true
-      }).catch(function(error) {
-        console.warn('Zappy Analytics: Failed to track event', error);
-      });
-    }
-  }
-  
-  // Track page view
-  if (config.trackPageViews) {
-    trackEvent('pageview', {
-      title: document.title,
-      url: window.location.href
-    });
-  }
-  
-  // Track clicks on important elements
-  if (config.trackClicks) {
-    document.addEventListener('click', function(e) {
-      var target = e.target;
-      
-      // Track button clicks (counted as actions)
-      if (target.tagName === 'BUTTON' || target.closest('button')) {
-        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
-        trackEvent('click', {
-          element: 'button',
-          text: button.textContent.trim().substring(0, 100),
-          id: button.id || null,
-          class: button.className || null
-        });
-      }
-      
-      // Track link clicks (navigation - not counted as actions)
-      else if (target.tagName === 'A' || target.closest('a')) {
-        var link = target.tagName === 'A' ? target : target.closest('a');
-        trackEvent('navigation', {
-          element: 'link',
-          text: link.textContent.trim().substring(0, 100),
-          href: link.href,
-          external: link.hostname !== window.location.hostname
-        });
-      }
-    }, true);
-  }
-  
-  // Track form submissions
-  if (config.trackFormSubmissions) {
-    document.addEventListener('submit', function(e) {
-      var form = e.target;
-      
-      trackEvent('form_submit', {
-        form_id: form.id || null,
-        form_name: form.name || null,
-        form_action: form.action || null,
-        form_method: form.method || 'GET'
-      });
-    }, true);
-  }
-  
-  // Track time on page (send on page unload)
-  var pageLoadTime = Date.now();
-  
-  window.addEventListener('beforeunload', function() {
-    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
-    
-    trackEvent('page_unload', {
-      time_on_page: timeOnPage,
-      page_path: window.location.pathname
-    });
-  });
-  
-  // Expose tracking function globally for custom events
-  window.zappyAnalytics = {
-    track: trackEvent,
-    getVisitorId: function() { return visitorId; },
-    getSessionId: function() { return sessionId; }
-  };
-  
-})();
-</script>
-<!-- End Zappy Analytics -->
-    <link rel="stylesheet" href="/styles.css">
-</head>
+</style></head>
 <body>
 
 <!-- Zappy Attribution Header -->
@@ -940,7 +975,7 @@ img[data-no-hero-position] { position: static !important; }
 <nav class="navbar" id="navbar">
 <div class="container nav-container">
 <div class="nav-brand">
-<a href="/home-page" class="logo-link">דף הבית</a>
+<a href="/" class="logo-link"><img src="assets/logo.webp" alt="הדרך שלך" class="logo"></img></a>
 </div>
 <button class="mobile-toggle" id="mobileToggle" aria-label="תפריט">
 <svg class="hamburger-icon" width="24" height="24" viewbox="0 0 24 24" fill="none">
@@ -955,7 +990,7 @@ img[data-no-hero-position] { position: static !important; }
 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
 </svg>
 </button>
-<ul class="nav-menu" id="navMenu"><li><a href="/home-page">דף הבית</a></li><li><a href="/my-service">השרות שלי</a></li><li><a href="/about-me">אודותי</a></li><li><a href="/blog" class="nav-link">המגזין</a><ul class="sub-menu"><li><a href="/blog/packing-tips">אריזה חכמה: צ'ק ליסט לטיול באירופה | הדרך שלך</a></li><li><a href="/blog/planning-guide">המדריך המלא לתכנון טיול מותאם אישית לאירופה | הדרך שלך</a></li><li><a href="/blog/concerts-abroad">כרטיסים להופעות בחו"ל: המדריך למטייל המוזיקלי | הדרך שלך</a></li><li><a href="/blog/culinary-journey">מסע קולינרי: היעדים הכי טעימים באירופה | הדרך שלך</a></li><li><a href="/blog/europe-transport-guide">מדריך התניידות באירופה - הדרך שלך</a></li><li><a href="/blog/accommodation-guide">מדריך לינה באירופה | הדרך שלך</a></li><li><a href="/blog/family-trip">טיפים לטיול משפחתי באירופה | הדרך שלך</a></li></ul></li><li class="nav-cta-item-mobile"><a href="/contact">צור קשר</a></li><li><a href="/benefits" class="nav-link">היתרונות שלנו</a></li><li><a href="/pricing" class="nav-link">חבילות ומחירים</a></li><li><a href="/blog-418396" class="nav-link">הבלוג שלנו</a><ul class="sub-menu"><li><a href="/blog/paris-with-kids" class="nav-link">פריז</a></li><li><a href="/blog/holland-families" class="nav-link">הולנד</a></li><li><a href="/blog/alps-adventure" class="nav-link">האלפים</a></li><li><a href="/blog/south-america-couples" class="nav-link">דרום אמריקה</a></li></ul></li></ul>
+<ul class="nav-menu" id="navMenu"><li><a href="/my-service">השרות שלי</a></li><li><a href="/about-me">אודותי</a></li><li><a href="/blog" class="nav-link">המגזין</a><ul class="sub-menu"><li><a href="/blog/packing-tips">אריזה חכמה: צ'ק ליסט לטיול באירופה | הדרך שלך</a></li><li><a href="/blog/planning-guide">המדריך המלא לתכנון טיול מותאם אישית לאירופה | הדרך שלך</a></li><li><a href="/blog/concerts-abroad">כרטיסים להופעות בחו"ל: המדריך למטייל המוזיקלי | הדרך שלך</a></li><li><a href="/blog/culinary-journey">מסע קולינרי: היעדים הכי טעימים באירופה | הדרך שלך</a></li><li><a href="/blog/europe-transport-guide">מדריך התניידות באירופה - הדרך שלך</a></li><li><a href="/blog/accommodation-guide">מדריך לינה באירופה | הדרך שלך</a></li><li><a href="/blog/family-trip">טיפים לטיול משפחתי באירופה | הדרך שלך</a></li></ul></li><li><a href="/testimonials" class="nav-link">לקוחות ממליצים</a></li><li class="nav-cta-item-mobile"><a href="/contact">צור קשר</a></li><li><a href="/benefits" class="nav-link">היתרונות שלנו</a></li><li><a href="/pricing" class="nav-link">חבילות ומחירים</a></li><li><a href="/blog-418396" class="nav-link">הבלוג שלנו</a><ul class="sub-menu"><li><a href="/blog/paris-with-kids" class="nav-link">פריז</a></li><li><a href="/blog/holland-families" class="nav-link">הולנד</a></li><li><a href="/blog/alps-adventure" class="nav-link">האלפים</a></li><li><a href="/blog/south-america-couples" class="nav-link">דרום אמריקה</a></li></ul></li></ul>
 <div class="nav-cta-container">
 <li class="nav-cta-item">
 <a href="/contact" class="nav-cta-btn">צור קשר</a>
@@ -1002,7 +1037,7 @@ img[data-no-hero-position] { position: static !important; }
             </li>
             <li style="margin-bottom: 0.8rem; color: #505030 !important; display: flex; align-items: center;" class="zappy-editable">
               <span style="color: #7fb3b1 !important; margin-left: 0.5rem; font-weight: bold;">✓</span> בניית מסלול יומי מפורט
-            <br></li>
+            <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br></li>
             <li style="margin-bottom: 0.8rem; display: flex; align-items: center; color: rgb(80, 80, 48) !important; text-align: right;" class="zappy-editable">
               <span style="color: #7fb3b1 !important; margin-left: 0.5rem; font-weight: bold;">✓</span> הזמנת כרטיסי טיסה והעברות,&nbsp; בתי מלון, כרטיסים לחוויות ולהופעות</li>
             <li style="margin-bottom: 0.8rem; display: flex; align-items: center; color: rgb(80, 80, 48) !important;" class="zappy-editable">
@@ -1022,21 +1057,21 @@ img[data-no-hero-position] { position: static !important; }
       <div class="grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
         <div class="feature-item" style="text-align: center;">
           <div style="width: 100%; aspect-ratio: 16/9; margin-bottom: 1rem; overflow: hidden; border-radius: 8px;">
-            <img data-placeholder="feature-1" data-context="Happy couple looking at map in European city street" data-zappy-editable-image="true" src="/assets/page-feature-1-1767287130133.webp" alt="תכנון מותאם אישית" style="width: 100%; height: 100%; object-fit: cover;" data-no-hero-position="true" class="generated-image">
+            <img data-placeholder="feature-1" data-context="Happy couple looking at map in European city street" data-zappy-editable-image="true" src="assets/page-feature-1-1767287130133.webp" alt="תכנון מותאם אישית" style="width: 100%; height: 100%; object-fit: cover;" data-no-hero-position="true" class="generated-image"></img>
           </div>
           <h3 style="color: #405030 !important; font-size: 1.2rem; margin-bottom: 0.5rem;">התאמה אישית מלאה</h3>
           <p style="color: #505030 !important; font-size: 0.95rem;">כל מסלול נבנה במיוחד עבורכם, לפי התקציב, תחומי העניין והקצב שמתאים לכם.</p>
         </div>
         <div class="feature-item" style="text-align: center;">
           <div style="width: 100%; aspect-ratio: 16/9; margin-bottom: 1rem; overflow: hidden; border-radius: 8px;">
-            <img data-placeholder="feature-2" data-context="Concert tickets and event pass on a table" data-zappy-editable-image="true" src="/assets/page-feature-2-1767287133353.webp" alt="כרטיסים ואירועים" style="width: 100%; height: 100%; object-fit: cover;" data-no-hero-position="true" class="generated-image">
+            <img data-placeholder="feature-2" data-context="Concert tickets and event pass on a table" data-zappy-editable-image="true" src="assets/page-feature-2-1767287133353.webp" alt="כרטיסים ואירועים" style="width: 100%; height: 100%; object-fit: cover;" data-no-hero-position="true" class="generated-image"></img>
           </div>
           <h3 style="color: #405030 !important; font-size: 1.2rem; margin-bottom: 0.5rem;">גישה לאירועים בלעדיים</h3>
           <p style="color: #505030 !important; font-size: 0.95rem;">אנו דואגים להזמנת כרטיסים להופעות בחו"ל, משחקי ספורט ואטרקציות מבוקשות מראש.</p>
         </div>
         <div class="feature-item" style="text-align: center;">
           <div style="width: 100%; aspect-ratio: 16/9; margin-bottom: 1rem; overflow: hidden; border-radius: 8px;">
-            <img data-placeholder="feature-3" data-context="Relaxed traveler drinking coffee with view" data-zappy-editable-image="true" src="/assets/page-feature-3-1767287130987.webp" alt="שקט נפשי" style="width: 100%; height: 100%; object-fit: cover;" data-no-hero-position="true" class="generated-image">
+            <img data-placeholder="feature-3" data-context="Relaxed traveler drinking coffee with view" data-zappy-editable-image="true" src="assets/page-feature-3-1767287130987.webp" alt="שקט נפשי" style="width: 100%; height: 100%; object-fit: cover;" data-no-hero-position="true" class="generated-image"></img>
           </div>
           <h3 style="color: #405030 !important; font-size: 1.2rem; margin-bottom: 0.5rem;">ראש שקט בטיול</h3>
           <p style="color: #505030 !important; font-size: 0.95rem;">חסכו זמן יקר ומאמץ בתכנון. אנו דואגים לכל הפרטים הקטנים כדי שתוכלו פשוט ליהנות.</p>
@@ -1154,40 +1189,27 @@ img[data-no-hero-position] { position: static !important; }
 })();
 </script>
     <div data-integration="accessibility:toolbar"></div>
-
+</body></html>
+    <script src="/script.js"></script>
     <script id="zappy-mobile-submenu-script">
     (function() {
       function initMobileSubmenuToggles() {
-        if (window.innerWidth > 768) {
-          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
-          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
-          return;
-        }
-        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
-        items.forEach(function(li) {
+        if (window.innerWidth > 768) { document.querySelectorAll('.mobile-submenu-toggle').forEach(function(b){b.remove();}); document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(m){m.classList.remove('mobile-expanded');}); return; }
+        document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)').forEach(function(li) {
           if (li.querySelector('.mobile-submenu-toggle')) return;
-          var submenu = li.querySelector('.sub-menu');
-          var parentLink = li.querySelector(':scope > a');
-          if (!submenu || !parentLink) return;
-          var toggleBtn = document.createElement('button');
-          toggleBtn.className = 'mobile-submenu-toggle';
-          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
-          toggleBtn.setAttribute('type', 'button');
-          parentLink.insertAdjacentElement('afterend', toggleBtn);
-          toggleBtn.addEventListener('click', function(e) {
-            e.preventDefault(); e.stopPropagation();
-            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
-              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
-            });
-            submenu.classList.toggle('mobile-expanded');
-            toggleBtn.classList.toggle('expanded');
+          var sm = li.querySelector('.sub-menu'), pl = li.querySelector(':scope > a') || li.querySelector(':scope > .menu-group-title');
+          if (!sm || !pl) return;
+          var tb = document.createElement('button'); tb.className = 'mobile-submenu-toggle'; tb.setAttribute('aria-label', 'Toggle submenu'); tb.setAttribute('type', 'button');
+          pl.insertAdjacentElement('afterend', tb);
+          tb.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(m) { if (m !== sm) { m.classList.remove('mobile-expanded'); var t = m.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }});
+            sm.classList.toggle('mobile-expanded'); tb.classList.toggle('expanded');
           });
         });
       }
-      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
-      else { initMobileSubmenuToggles(); }
-      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); } else { initMobileSubmenuToggles(); }
+      window.addEventListener('resize', function() { clearTimeout(window._mrt); window._mrt = setTimeout(initMobileSubmenuToggles, 250); });
     })();
     </script>
-    <script src="/script.js"></script>
-</body></html>
+</body>
+</html>
