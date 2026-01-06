@@ -669,7 +669,7 @@
             (function() {
               function initMobileMenuToggles() {
                 // Only run on mobile
-                if (window.innerWidth &gt; 768) {
+                if (window.innerWidth > 768) {
                   // Remove any toggle buttons on desktop
                   document.querySelectorAll('.mobile-submenu-toggle').forEach(btn =&gt; btn.remove());
                   document.querySelectorAll('.sub-menu.mobile-expanded').forEach(menu =&gt; {
@@ -755,7 +755,7 @@
               // This handles cases where the mobile menu is hidden initially
               const observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
-                  if (mutation.type === 'attributes' &amp;&amp; mutation.attributeName === 'class') {
+                  if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
                     const target = mutation.target;
                     if (target.classList.contains('active') || target.style.display !== 'none') {
                       console.log('[MOBILE MENU] Mobile menu became visible, re-initializing...');
@@ -972,7 +972,7 @@
         var header = document.getElementById('zappy-attribution-header');
         if (header) {
           // Use dynamic announcement content if available
-          if (data.announcement &amp;&amp; data.announcement.html) {
+          if (data.announcement && data.announcement.html) {
             header.innerHTML = data.announcement.html;
           }
           // Apply fixed positioning styles inline (works for existing sites too)
@@ -989,7 +989,7 @@
           var navbar = null;
           for (var j = 0; j &lt; navSelectors.length; j++) {
             navbar = document.querySelector(navSelectors[j]);
-            if (navbar &amp;&amp; navbar.id !== 'zappy-attribution-header') break;
+            if (navbar && navbar.id !== 'zappy-attribution-header') break;
             navbar = null;
           }
           if (navbar) {
