@@ -1714,3 +1714,89 @@ body.accessibility-widget-visible ._access-menu {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+
+/* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+/* Base styles for dropdown submenus */
+.nav-menu li:has(.sub-menu),
+nav li:has(.sub-menu),
+.navbar li:has(.sub-menu),
+#navMenu li:has(.sub-menu) {
+  position: relative;
+}
+
+.nav-menu .sub-menu,
+nav .sub-menu,
+.navbar .sub-menu,
+#navMenu .sub-menu {
+  display: block !important;
+  position: absolute !important;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  list-style: none;
+  pointer-events: none;
+}
+
+/* CRITICAL: Desktop hover styles to show dropdown */
+.nav-menu li:hover > .sub-menu,
+nav li:hover > .sub-menu,
+.navbar li:hover > .sub-menu,
+#navMenu li:hover > .sub-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+.sub-menu li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sub-menu a {
+  display: block !important;
+  padding: 10px 16px !important;
+  color: #333 !important;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.sub-menu a:hover {
+  background-color: #f5f5f5;
+}
+
+/* RTL (Hebrew/Arabic) dropdown positioning */
+[dir="rtl"] .nav-menu .sub-menu,
+[dir="rtl"] nav .sub-menu,
+[dir="rtl"] .navbar .sub-menu,
+html[lang="he"] .nav-menu .sub-menu,
+html[lang="he"] nav .sub-menu,
+html[lang="he"] .navbar .sub-menu,
+html[lang="ar"] .nav-menu .sub-menu,
+html[lang="ar"] nav .sub-menu,
+html[lang="ar"] .navbar .sub-menu {
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* Hide empty dropdown menus */
+.sub-menu:empty,
+.sub-menu:not(:has(li:not(.zappy-hidden-menu-item))),
+.sub-menu:not(:has(li)) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
